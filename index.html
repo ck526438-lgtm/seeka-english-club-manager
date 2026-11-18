@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seeka University — English Club Manager</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="container header-content">
+      <div class="brand">
+        <img src="assets/logo.svg" alt="Blason Seeka University English Club" class="brand-logo" />
+        <div class="brand-text">
+          <span class="university-name">SEEKA UNIVERSITY</span>
+          <h1>English Club Manager</h1>
+          <p class="subtitle">Carnet numérique des séances, du vocabulaire et des expressions</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="btnExportCSV" class="btn btn-outline-gold" title="Exporter au format Excel / CSV">
+          <span>📊 Exporter CSV</span>
+        </button>
+        <button id="btnExportJSON" class="btn btn-outline-gold" title="Sauvegarder une copie JSON">
+          <span>💾 Sauvegarder JSON</span>
+        </button>
+        <label for="inputImportJSON" class="btn btn-outline-light" title="Restaurer depuis un fichier JSON">
+          <span>📂 Importer JSON</span>
+          <input type="file" id="inputImportJSON" accept=".json" hidden />
+        </label>
+      </div>
+    </div>
+  </header>
+
+  <main class="container main-layout">
+    <!-- Statistiques -->
+    <section class="stats-grid" aria-label="Statistiques du club">
+      <div class="stat-card">
+        <span class="stat-label">Séances enregistrées</span>
+        <strong class="stat-value" id="statSessions">0</strong>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Mots & Expressions</span>
+        <strong class="stat-value" id="statVocab">0</strong>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Catégorie principale</span>
+        <strong class="stat-value stat-text" id="statTopCategory">—</strong>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Dernière séance</span>
+        <strong class="stat-value stat-text" id="statLastDate">—</strong>
+      </div>
+    </section>
+
+    <div class="workspace-grid">
+      <!-- Formulaire de saisie -->
+      <aside class="form-panel card">
+        <div class="card-header">
+          <h2 id="formTitle">Nouvelle séance</h2>
+          <button type="button" id="btnCancelEdit" class="btn-link hidden">Annuler la modification</button>
+        </div>
+
+        <form id="sessionForm">
+          <input type="hidden" id="sessionId" />
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="sessionDate">Date de la séance *</label>
+              <input type="date" id="sessionDate" required />
+            </div>
+            <div class="form-group">
+              <label for="sessionCategory">Catégorie *</label>
+              <select id="sessionCategory" required>
+                <option value="Vocabulaire & Expressions">Vocabulaire & Expressions</option>
+                <option value="Débat & Conversation">Débat & Conversation</option>
+                <option value="Grammaire & Conjugaison">Grammaire & Conjugaison</option>
+                <option value="Prononciation & Phonétique">Prononciation & Phonétique</option>
+                <option value="Culture & Actualités">Culture & Actualités</option>
+                <option value="Autre">Autre</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="sessionTopic">Thème ou titre du jour *</label>
+            <input type="text" id="sessionTopic" placeholder="Ex : Idioms for Daily Conversation, Climate Debate..." required />
+          </div>
+
+          <div class="form-group">
+            <label for="sessionSpeaker">Animateur / Intervenant</label>
+            <input type="text" id="sessionSpeaker" placeholder="Ex : Dr. Kouassi, Bureau du Club..." />
+          </div>
+
+          <div class="form-group">
+            <label for="sessionNotes">Notes, règles et résumé de la séance</label>
+            <textarea id="sessionNotes" rows="4" placeholder="Notez ici les explications, règles grammaticales, idées clés débattues..."></textarea>
+          </div>
+
+          <div class="vocab-section">
+            <div class="vocab-header">
+              <label>Mots & Expressions appris (EN / FR)</label>
+              <button type="button" id="btnAddVocab" class="btn btn-sm btn-navy">+ Ajouter une paire</button>
+            </div>
+            <div id="vocabList" class="vocab-list"></div>
+          </div>
+
+          <button type="submit" id="btnSubmit" class="btn btn-gold btn-block">
+            Enregistrer la séance
+          </button>
+        </form>
+      </aside>
+
+      <!-- Liste des séances -->
+      <section class="feed-panel">
+        <div class="toolbar card">
+          <div class="search-box">
+            <input type="search" id="searchInput" placeholder="Rechercher un thème, un mot anglais, une traduction, un intervenant..." />
+          </div>
+          <div class="filter-pills" id="filterPills">
+            <button type="button" class="pill active" data-category="ALL">Toutes</button>
+            <button type="button" class="pill" data-category="Vocabulaire & Expressions">Vocabulaire</button>
+            <button type="button" class="pill" data-category="Débat & Conversation">Débat</button>
+            <button type="button" class="pill" data-category="Grammaire & Conjugaison">Grammaire</button>
+            <button type="button" class="pill" data-category="Prononciation & Phonétique">Prononciation</button>
+            <button type="button" class="pill" data-category="Culture & Actualités">Culture</button>
+          </div>
+        </div>
+
+        <div id="sessionsContainer" class="sessions-list"></div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="container">
+      <p><strong>Seeka University — English Club</strong> • Données stockées localement sur votre navigateur (100 % hors-ligne).</p>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

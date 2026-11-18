@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 270" width="240" height="270">
+  <defs>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#a67c00"/>
+      <stop offset="50%" stop-color="#ffdf73"/>
+      <stop offset="100%" stop-color="#a67c00"/>
+    </linearGradient>
+    <linearGradient id="navyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0b2259"/>
+      <stop offset="100%" stop-color="#040e27"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Bouclier principal -->
+  <path d="M35 20 H205 V125 C205 182 120 225 120 225 C120 225 35 182 35 125 Z"
+        fill="url(#navyGrad)" stroke="#000000" stroke-width="5"/>
+
+  <!-- Bandeau supérieur doré -->
+  <rect x="38" y="23" width="164" height="32" fill="url(#goldGrad)" stroke="#000000" stroke-width="2"/>
+  <text x="120" y="44" font-family="Georgia, serif" font-size="14.5" font-weight="bold"
+        fill="#061539" text-anchor="middle" letter-spacing="0.8">SEEKA UNIVERSITY</text>
+
+  <!-- Aigle doré stylisé -->
+  <path d="M120 82 C115 82 111 86 111 91 L106 93 L111 96 C111 100 107 104 100 104
+           C82 104 62 86 45 72 C48 84 55 96 68 106 C60 106 53 103 48 100
+           C54 112 67 121 83 125 C93 128 102 128 107 127 L101 138 L120 143
+           L139 138 L133 127 C138 128 147 128 157 125 C173 121 186 112 192 100
+           C187 103 180 106 172 106 C185 96 192 84 195 72 C178 86 158 104 140 104
+           C132 104 128 99 127 93 C126 86 123 82 120 82 Z"
+        fill="url(#goldGrad)" stroke="#000000" stroke-width="1.5"/>
+
+  <!-- Livre ouvert -->
+  <g transform="translate(0, 6)">
+    <rect x="78" y="138" width="84" height="50" rx="2" fill="url(#goldGrad)" stroke="#000000" stroke-width="2"/>
+    <path d="M83 135 Q102 132 120 140 Q138 132 157 135 V182 Q138 176 120 184 Q102 176 83 182 Z"
+          fill="#ffffff" stroke="#000000" stroke-width="2"/>
+    <line x1="120" y1="140" x2="120" y2="184" stroke="#000000" stroke-width="2"/>
+    <line x1="90" y1="148" x2="113" y2="150" stroke="#333" stroke-width="1.5"/>
+    <line x1="90" y1="156" x2="113" y2="158" stroke="#333" stroke-width="1.5"/>
+    <line x1="90" y1="164" x2="113" y2="166" stroke="#333" stroke-width="1.5"/>
+    <line x1="127" y1="150" x2="150" y2="148" stroke="#333" stroke-width="1.5"/>
+    <line x1="127" y1="158" x2="150" y2="156" stroke="#333" stroke-width="1.5"/>
+    <line x1="127" y1="166" x2="150" y2="164" stroke="#333" stroke-width="1.5"/>
+  </g>
+
+  <!-- Ruban inférieur ENGLISH CLUB -->
+  <path d="M22 192 Q120 262 218 192 L205 215 Q120 272 35 215 Z"
+        fill="url(#goldGrad)" stroke="#000000" stroke-width="2.5"/>
+  <path id="ribbonArc" d="M 42 212 Q 120 264 198 212" fill="none"/>
+  <text font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#061539" letter-spacing="1.5">
+    <textPath href="#ribbonArc" startOffset="50%" text-anchor="middle">• ENGLISH CLUB •</textPath>
+  </text>
+</svg>
