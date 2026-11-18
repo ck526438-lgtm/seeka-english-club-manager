@@ -21,6 +21,10 @@ jobs:
           name: Seeka-English-Club-Windows
           path: dist/*.exe
       - name: Release
-        if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
-        with: { files: "dist/*.exe" }
+        with:
+          tag_name: v1.0.0
+          name: Seeka English Club Manager v1.0.0
+          body: "Première version Windows : installateur (Setup) et version portable."
+          make_latest: true
+          files: "dist/*.exe"
