@@ -1,6 +1,6 @@
 {
   "name": "seeka-english-club-manager",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Seeka University — English Club Manager (application de bureau Windows)",
   "main": "main.js",
   "author": "Christ (ck526438-lgtm)",
@@ -16,7 +16,7 @@
   "build": {
     "appId": "ci.seeka.englishclub",
     "productName": "Seeka English Club Manager",
-    "files": ["main.js", "index.html", "css/**", "js/**", "assets/**", "build/icon.png"],
+    "files": ["main.js", "preload.js", "index.html", "css/**", "js/**", "assets/**", "build/icon.png"],
     "directories": { "output": "dist" },
     "win": {
       "icon": "build/icon.png",

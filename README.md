@@ -10,6 +10,7 @@ Application web légère, moderne et **100 % hors-ligne** conçue pour le **Club
 * **Carnet de vocabulaire bilingue (EN / FR)** : Ajout dynamique de paires *Mot / Expression anglaise* et *Traduction / Sens en français*.
 * **Tableau de bord en temps réel** : Compteur de séances, nombre total d'expressions apprises, catégorie dominante et date de la dernière séance.
 * **Recherche & Filtres instantanés** : Filtrage par catégorie et recherche multicritères (thème, mot anglais, traduction française, intervenant).
+* **Enregistrement PDF** : compte-rendu A4 des séances affichées (filtre et recherche appliqués), avec tableaux de vocabulaire EN / FR.
 * **Partage rapide** : Copie d'un compte-rendu formaté en un clic pour diffusion sur WhatsApp, Telegram ou par e-mail.
 * **Sauvegarde & Exportation** :
   * Stockage automatique local (`localStorage`) sans serveur requis.

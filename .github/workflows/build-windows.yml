@@ -23,8 +23,8 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0.0
-          name: Seeka English Club Manager v1.0.0
-          body: "Première version Windows : installateur (Setup) et version portable."
+          tag_name: v1.1.0
+          name: Seeka English Club Manager v1.1.0
+          body: "Nouveau : bouton « Enregistrer en PDF » (compte-rendu des séances affichées). Installateur (Setup) et version portable."
           make_latest: true
           files: "dist/*.exe"

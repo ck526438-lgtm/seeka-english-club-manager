@@ -31,6 +31,7 @@
 
   const btnExportCSV = document.getElementById("btnExportCSV");
   const btnExportJSON = document.getElementById("btnExportJSON");
+  const btnExportPDF = document.getElementById("btnExportPDF");
   const inputImportJSON = document.getElementById("inputImportJSON");
   const toastEl = document.getElementById("toast");
 
@@ -85,6 +86,7 @@
 
     btnExportCSV.addEventListener("click", exportCSV);
     btnExportJSON.addEventListener("click", exportJSON);
+    btnExportPDF.addEventListener("click", exportPDF);
     inputImportJSON.addEventListener("change", importJSON);
   }
 
@@ -239,7 +241,12 @@
   }
 
   function renderSessions() {
-    const filtered = sessions.filter((s) => {
+    const filtered = getFilteredSessions();
+    renderSessionList(filtered);
+  }
+
+  function getFilteredSessions() {
+    return sessions.filter((s) => {
       const matchCat = activeCategory === "ALL" || s.category === activeCategory;
       if (!matchCat) return false;
       if (!searchQuery) return true;
@@ -255,7 +262,9 @@
         inVocab
       );
     });
+  }
 
+  function renderSessionList(filtered) {
     if (filtered.length === 0) {
       sessionsContainer.innerHTML = `
         <div class="empty-state">
@@ -375,6 +384,71 @@
       inputImportJSON.value = "";
     };
     reader.readAsText(file);
+  }
+
+  function buildReportHTML(list) {
+    const filtre = activeCategory === "ALL" ? "Toutes les catégories" : activeCategory;
+    const totalVocab = list.reduce((n, s) => n + (s.vocab || []).length, 0);
+    const today = new Date().toLocaleDateString("fr-FR");
+    const blocks = list.map((s) => {
+      const vocab = (s.vocab || []).length
+        ? `<table><thead><tr><th>Anglais</th><th>Français</th></tr></thead><tbody>${s.vocab
+            .map((v) => `<tr><td>${escapeHtml(v.en)}</td><td>${escapeHtml(v.fr)}</td></tr>`)
+            .join("")}</tbody></table>`
+        : "";
+      return `<section class="s">
+        <div class="meta"><span class="cat">${escapeHtml(s.category)}</span> ${formatDateFR(s.date)}${
+          s.speaker ? " · Intervenant : " + escapeHtml(s.speaker) : ""}</div>
+        <h2>${escapeHtml(s.topic)}</h2>
+        ${s.notes ? `<p class="notes">${escapeHtml(s.notes).replace(/\n/g, "<br>")}</p>` : ""}
+        ${vocab}
+      </section>`;
+    }).join("");
+    return `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><title>Compte-rendu English Club</title>
+<style>
+@page { size: A4; margin: 16mm 14mm; }
+body { font-family: "Segoe UI", Arial, sans-serif; color: #1a2233; font-size: 11pt; margin: 0; }
+header { border-bottom: 3px solid #c9a227; padding-bottom: 10px; margin-bottom: 14px; }
+header h1 { color: #0b1f3a; font-size: 18pt; margin: 0 0 4px; }
+header p { margin: 0; color: #555; font-size: 10pt; }
+.s { border: 1px solid #dde3ee; border-left: 4px solid #0b1f3a; border-radius: 6px; padding: 10px 12px; margin-bottom: 12px; page-break-inside: avoid; }
+.meta { font-size: 9.5pt; color: #555; }
+.cat { background: #0b1f3a; color: #fff; padding: 1px 8px; border-radius: 10px; font-weight: 600; margin-right: 6px; }
+h2 { font-size: 13pt; margin: 6px 0; color: #0b1f3a; }
+.notes { margin: 4px 0 8px; line-height: 1.45; }
+table { width: 100%; border-collapse: collapse; font-size: 10pt; }
+th { background: #c9a227; color: #0b1f3a; text-align: left; padding: 4px 6px; }
+td { border-bottom: 1px solid #e5e9f0; padding: 4px 6px; }
+footer { text-align: center; font-size: 8.5pt; color: #888; margin-top: 16px; }
+</style></head><body>
+<header><h1>Seeka University — English Club</h1>
+<p>Compte-rendu des séances · ${escapeHtml(filtre)}${searchQuery ? " · Recherche : « " + escapeHtml(searchQuery) + " »" : ""}</p>
+<p>${list.length} séance(s) · ${totalVocab} expression(s) · Généré le ${today}</p></header>
+${blocks}
+<footer>Seeka English Club Manager</footer>
+</body></html>`;
+  }
+
+  async function exportPDF() {
+    const list = getFilteredSessions();
+    if (list.length === 0) {
+      showToast("Aucune séance à enregistrer en PDF.");
+      return;
+    }
+    const html = buildReportHTML(list);
+    const filename = `seeka-english-club-${new Date().toISOString().slice(0, 10)}.pdf`;
+    if (window.seekaDesktop && window.seekaDesktop.savePDF) {
+      const res = await window.seekaDesktop.savePDF(html, filename);
+      if (res && res.ok) showToast("PDF enregistré !");
+      else if (res && res.error) showToast("Erreur PDF : " + res.error);
+      return;
+    }
+    // Version navigateur : boîte d'impression → « Enregistrer au format PDF »
+    const w = window.open("", "_blank");
+    if (!w) { showToast("Autorisez les fenêtres pop-up pour exporter."); return; }
+    w.document.write(html);
+    w.document.close();
+    w.onload = () => { w.focus(); w.print(); };
   }
 
   function downloadFile(content, filename, mimeType) {
